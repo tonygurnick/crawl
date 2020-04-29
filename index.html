@@ -30,6 +30,7 @@ body::after {
         font-size: 5rem;
         text-transform:uppercase;
         color: #d1d1d1;
+	pointer-events:none;
 }
 
 body.loaded::after{
@@ -74,8 +75,8 @@ body.loaded::after{
 p {
 	padding-bottom: 50%;
 }
-
-.dragging { background-color:#f1f1f1;}
+.paused #main{background-color: pink;}
+.dragging #main { background-color:#f1f1f1;}
 #progress-bar{
 	position: fixed;
 	border: 1px solid red;
@@ -93,9 +94,20 @@ p {
 	// overview bar - or is that the scroll bar?
 	// and elapsed time and predicted finish time
 	// reading time dashboard presentation time/scrolling time/elapsed time.  time sofar and time to finish
-let PAUSED = false;
+	;(function VIEWSTATE(){
+	
+	        document.addEventListener('pause', function (e) {
+        		document.body.classList.add("paused");
+		});
 
+        	document.addEventListener('unpause', function (e) {
+        		document.body.classList.remove("paused");
+        	});
+	
+	})();
 ;( function SCROLLER (){
+
+	let PAUSED = false;
 
 	const main = document.getElementById("main");
 	
@@ -105,6 +117,14 @@ let PAUSED = false;
 		}
 	        requestAnimationFrame(repeatOften);
 	}
+
+	document.addEventListener('pause', function (e) {
+		PAUSED=true;	
+	});
+	
+	document.addEventListener('unpause', function (e) {
+		PAUSED=false;
+	});
 
 	document.addEventListener('userloadedfile', function (e) {
 		main.scrollTop=0;
@@ -171,7 +191,6 @@ let PAUSED = false;
 
 ;( function FILEDRAG(){
 
-
 		document.addEventListener('dragover', function (e) {
 			e.preventDefault();
 		});
@@ -227,16 +246,87 @@ let PAUSED = false;
 
 ;( function BASIC_CONTROLS(){
 
-document.addEventListener("keyup",  function(event) {
-console.log(event)
-	if (event.code === 'Space') {
-		PAUSED =!PAUSED;
-		console.log(PAUSED)
+	let PAUSED = false;
+
+	function pause(){
+	   const event = new CustomEvent('pause');
+           document.dispatchEvent(event);
+		PAUSED=true;
+	}
+	function unpause(){
+	   const event = new CustomEvent('unpause');
+           document.dispatchEvent(event);
+		PAUSED=false;
 	}
 
+	document.addEventListener("keydown",  function(event) {
+		if (event.code === 'Space') {
+			event.preventDefault();
 
-}, false )
+			if ( PAUSED === true ){
+				unpause();
+			} else {
+				pause();
+			}
+		}
+
+	}, false )
+	
+
+	document.addEventListener("manualscroll", function(e){
+		pause();
+	}, false);
+	
+	document.addEventListener("mousedown", function(e){
+		pause();	
+	}, false);
+
+	document.addEventListener("mouseup", function(e){
+		unpause();
+	}, false);
+
+	document.addEventListener("touchstart", function(e){
+			//PAUSED =true;
+	}, false);
+	document.addEventListener("touchend", function(e){
+			//PAUSED = false;
+	}, false);
+
 
 })();
 
+;( function USER_SCROLL_EVENT(){
+
+	let MANUAL_SCROLL=false;
+
+	const main = document.getElementById("main");
+
+	document.addEventListener("keyup",  function(event) {
+		if ( [33,34,38,40].includes(event.keyCode) ){
+			MANUAL_SCROLL=true;
+		}
+		if ( [35,36].includes(event.keyCode) && event.ctrlKey ){
+			MANUAL_SCROLL=true;
+		}
+	}, false);
+
+	document.addEventListener("mousemove", function(e){
+//			MANUAL_SCROLL=true;
+	}, false);
+
+	document.addEventListener("wheel", function(e){
+			MANUAL_SCROLL=true;
+	}, false);
+
+	main.addEventListener('scroll', function(e) {
+		if ( MANUAL_SCROLL ){
+			const event = new CustomEvent('manualscroll');
+			document.dispatchEvent(event);
+			MANUAL_SCROLL = false;
+		}
+	});
+
+
+
+})();
 </script>
