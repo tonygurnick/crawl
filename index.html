@@ -5,27 +5,27 @@
 <style>
 
 html {
-font-size: 62.5%;
-height 100%;
+	font-size: 62.5%;
+	height 100%;
 }
 body {
 	height: 100%;
-	width: 100%;
-	overflow: hidden;
 	scroll-behavior: smooth;
 	font-family: 'Roboto', sans-serif;
 	margin: 0;
 	padding:0;
+	color: #444;
 }
 
-body::after {
+body::after {background-color:green;
+	content:"drag a file here to get started.";
 	position:fixed;
 	top: 50%;
 	left:50%;
 	z-index: 1000;
 	transform: translate(-50%, -50%);
 	content: "drag a file here to get started.";
-		        text-align: center;
+	text-align: center;
         overflow-wrap: break-word;
         font-size: 5rem;
         text-transform:uppercase;
@@ -37,6 +37,9 @@ body.loaded::after{
 	display:none
 }
 
+/*
+ Blinds
+ */
 .loaded #main::before,
 .loaded #main::after {
 	content: "";
@@ -52,22 +55,16 @@ body.loaded::after{
 	top: auto;
 	bottom: 0;
 	background-image: linear-gradient( transparent, white );
-
 }
-#main { 
-	border: none;
-	resize: none;
-	xpointer-events:none;
-	overflow-wrap: break-word;
+
+
+#main {
 	min-height: 100%;
-	padding: 0;
+	border: none;;
+	overflow-wrap: break-word;
 	margin: 0;
-	width: 100%;
 	box-sizing: border-box;
-	padding: 25%;
-	display:block;
-	margin-bottom: 50%;
-	color: #444;
+	padding: 50% 25%;
 	font-size: 7rem;
 	line-height: 2;
 	text-align: justify;
@@ -78,15 +75,19 @@ p {
 .paused #main{background-color: pink;}
 .dragging #main { background-color:#f1f1f1;}
 #progress-bar{
-	position: fixed;
-	border: 1px solid blue;
-	left:0;right:0;top:0;height: 3px;width: 100%;
+	height:			3px;
+	position:		fixed;
+	background-color: 	blue;
+	left:0;
+	right:0;
+	top:0;
+	width: 100%;
 }
 </style>
 </head>
 <body class="droptarget">
 	<progress id="progress-bar" max=100 value=0></progress>
-	<textarea readonly=true  id="main"></textarea>
+	<main role="main" id="main"></main>
 </body>
 </html>
 <script>
@@ -113,7 +114,7 @@ p {
 	
 	function repeatOften() {
 		if ( PAUSED === false) {
-	        	main.scrollTop+=1;
+	        	document.body.scrollTop+=1;
 		}
 	        requestAnimationFrame(repeatOften);
 	}
@@ -127,7 +128,7 @@ p {
 	});
 
 	document.addEventListener('userloadedfile', function (e) {
-		main.scrollTop=0;
+		document.body.scrollTop=0;
 		main.innerHTML=localStorage.getItem(e.detail);
 		document.body.classList.add("loaded");
 		requestAnimationFrame(repeatOften);
@@ -192,6 +193,7 @@ p {
 ;( function FILEDRAG(){
 
 		document.addEventListener('dragover', function (e) {
+			console.log("aaaa")
 			e.preventDefault();
 		});
 
@@ -299,7 +301,7 @@ p {
 
 	let MANUAL_SCROLL=false;
 
-	const main = document.getElementById("main");
+	const main = document.body; //getElementById("main");
 
 	document.addEventListener("keyup",  function(event) {
 		if ( [33,34,38,40].includes(event.keyCode) ){
@@ -318,7 +320,7 @@ p {
 			MANUAL_SCROLL=true;
 	}, false);
 
-	main.addEventListener('scroll', function(e) {
+	document.addEventListener('scroll', function(e) {
 		if ( MANUAL_SCROLL ){
 			const event = new CustomEvent('manualscroll');
 			document.dispatchEvent(event);
