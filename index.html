@@ -104,17 +104,21 @@ p {
         	document.addEventListener('unpause', function (e) {
         		document.body.classList.remove("paused");
         	});
-	
+
+	        document.addEventListener('userloadedfile', function (e) {
+                	document.body.classList.add("loaded");
+        	}, false);
+
 	})();
 ;( function SCROLLER (){
-
 	let PAUSED = false;
+	let SPEED = 0;
 
 	const main = document.getElementById("main");
 	
 	function repeatOften() {
-		if ( PAUSED === false) {
-	        	document.body.scrollTop+=1;
+		if ( PAUSED === false  ) {
+	        	document.body.scrollTop+=SPEED;
 		}
 	        requestAnimationFrame(repeatOften);
 	}
@@ -123,14 +127,18 @@ p {
 		PAUSED=true;	
 	});
 	
+
 	document.addEventListener('unpause', function (e) {
 		PAUSED=false;
 	});
-
+	
+	document.addEventListener('speedchange', function (e) {
+		SPEED=e.detail;
+	});
+	
 	document.addEventListener('userloadedfile', function (e) {
 		document.body.scrollTop=0;
 		main.innerHTML=localStorage.getItem(e.detail);
-		document.body.classList.add("loaded");
 		requestAnimationFrame(repeatOften);
 	}, false);
 
@@ -193,7 +201,6 @@ p {
 ;( function FILEDRAG(){
 
 		document.addEventListener('dragover', function (e) {
-			console.log("aaaa")
 			e.preventDefault();
 		});
 
@@ -330,5 +337,15 @@ p {
 
 
 
+})();
+
+;( function SPEED_DIAL(){
+	const fib = [0,1,2,3,5,7,9,13, 15,21];
+        document.addEventListener("keydown",  function(event) {
+                if ( [ 48, 49, 50, 51, 52, 53, 54, 55, 56, 57 ].includes(event.keyCode) ){
+			const customEvent = new CustomEvent('speedchange', { detail:fib[event.keyCode-48] });
+                        document.dispatchEvent(customEvent);
+                }
+        }, false);
 })();
 </script>
