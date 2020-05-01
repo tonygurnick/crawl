@@ -17,14 +17,13 @@ body {
 	color: #444;
 }
 
-body::after {background-color:green;
-	content:"drag a file here to get started.";
+body::after {
 	position:fixed;
 	top: 50%;
 	left:50%;
 	z-index: 100;
 	transform: translate(-50%, -50%);
-	content: "drag a file here to get started.";
+	content:"drag a file here to get started. <esc> or double click for settings";
 	text-align: center;
         overflow-wrap: break-word;
         font-size: 5rem;
@@ -468,6 +467,10 @@ box-shadow: 0px 0px 8px -2px  #444;
 			const customEvent = new CustomEvent('settings');
                         document.dispatchEvent(customEvent);
                 }
+        }, false);
+        document.addEventListener("dblclick",  function(event) {
+			const customEvent = new CustomEvent('settings');
+                        document.dispatchEvent(customEvent);
         }, false);
 })();
 </script>
