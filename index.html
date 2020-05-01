@@ -22,7 +22,7 @@ body::after {background-color:green;
 	position:fixed;
 	top: 50%;
 	left:50%;
-	z-index: 1000;
+	z-index: 100;
 	transform: translate(-50%, -50%);
 	content: "drag a file here to get started.";
 	text-align: center;
@@ -43,7 +43,7 @@ body.loaded::after{
 .loaded #main::before,
 .loaded #main::after {
 	content: "";
-	z-index: 10;
+	z-index: 100;
 	position: fixed;
 	top: 0;
 	left: 0;
@@ -83,11 +83,119 @@ p {
 	top:0;
 	width: 100%;
 }
+.settings .settings-page {
+display: flex;
+}
+
+.settings-page {
+	position: fixed;
+	border: 5px solid #d1d1d1;
+	top:1rem;
+	left: 1rem;
+	right: 1rem;
+	bottom:1rem;
+	background-color: rgba(255,255,255,.9);
+	display: none;
+	flex-direction:column;
+	z-index: 1000;
+	padding: 3rem;
+}
+
+.settings-page  div{
+	display: flex; 
+	flex-direction: column;
+	
+}
+.settings-page  label{
+	font-weight: bold;
+	color : #444;
+	font-size: 1rem;
+}
+.settings-page input{
+	width: 100%;
+}
+.color-picker div {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: stretch;
+	height: 6rem;
+}
+.color-picker span{
+	display: block;
+	height: 10vw;
+	width: 10vw;
+	border: 1px solid #d1d1d1;
+	display: flex;
+	justify-content: center;
+	align-items:center;
+	margin: 1vw;
+	font-weight: bold;
+	font-size: 1vw;
+}
+.color-picker .color1 {
+	background-color: white;
+	color: black;
+}
+.color-picker .color2 {
+        background-color: black;
+        color: white;
+}
+.color-picker .color3 {
+        background-color: yellow;
+        color: blue;
+}
+.color-picker .color4 {
+        background-color: blue;
+        color: yellow;
+}
+
+.color-picker .color5 {
+        background-color: yellow;
+        color: black;
+}
+
+.color-picker .color6 {
+        background-color: black;
+        color: yellow;
+}
+
+.color-picker .color7 {
+        background-color: blue;
+        color: white;
+}
+.color-picker .color8 {
+        background-color: white;
+        color: blue;
+}
+
+.default {
+box-shadow: 0px 0px 8px -2px  #444;
+}
 </style>
 </head>
 <body class="droptarget">
 	<progress id="progress-bar" max=100 value=0></progress>
 	<main role="main" id="main"></main>
+<aside class="settings-page">
+<h2>settings</h2>
+<div><label for="volume">set your speed</label><input type="range" id="speed" name="speed" min="0" max="9"></div>
+
+<div class='color-picker'>
+	<label>choose your color</label>
+	<div>
+	<span class='default color1'>Black on White</span>
+	<span class='color2'>White on Black</span>
+	<span class='color3'>Blue on Yellow</span>
+	<span class='color4'>Yellow on Blue</span>
+	<span class='color5'>Black on Yellow</span>
+	<span class='color6'>Yellow on Black</span>
+	<span class='color7'>White on Blue</span>
+	<span class='color8'>Blue on White</span>
+	</div>
+</div>
+
+</aside>
 </body>
 </html>
 <script>
@@ -109,6 +217,9 @@ p {
                 	document.body.classList.add("loaded");
         	}, false);
 
+	        document.addEventListener('settings', function (e) {
+                	document.body.classList.toggle("settings");
+        	}, false);
 	})();
 ;( function SCROLLER (){
 	let PAUSED = false;
@@ -344,6 +455,17 @@ p {
         document.addEventListener("keydown",  function(event) {
                 if ( [ 48, 49, 50, 51, 52, 53, 54, 55, 56, 57 ].includes(event.keyCode) ){
 			const customEvent = new CustomEvent('speedchange', { detail:fib[event.keyCode-48] });
+                        document.dispatchEvent(customEvent);
+                }
+        }, false);
+
+})();
+
+;( function SETTINGS_DISPLAY_CONTROL(){
+
+        document.addEventListener("keyup",  function(event) {
+                if ( [27].includes(event.keyCode) ){
+			const customEvent = new CustomEvent('settings');
                         document.dispatchEvent(customEvent);
                 }
         }, false);
