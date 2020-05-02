@@ -362,6 +362,7 @@ box-shadow: inset 0px 0px 8px -2px  #444;
 	
 	document.addEventListener('userloadedfile', function (e) {
 		document.body.scrollTop=0;
+		SPEED=0;
 		main.innerHTML=localStorage.getItem(e.detail);
 		requestAnimationFrame(repeatOften);
 	}, false);
