@@ -4,6 +4,31 @@
 	<link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
 <style>
 
+
+/*
+
+	Fonts:
+
+		Georgia
+Helvetica
+PT Sans & PT Serif
+Open Sans
+
+Quicksand
+
+Verdana
+Rooney
+
+Karla
+Roboto
+Ubuntu
+Lato
+Futura
+
+
+
+
+*/
 html {
 	font-size: 62.5%;
 	height 100%;
@@ -16,6 +41,28 @@ body {
 	padding:0;
 	color: #444;
 }
+
+.theme1{ background-color:white;color:#444;}
+.theme2{ background-color:black;color:white;}
+.theme3{ background-color: #ffd662;color:#00539c;}
+.theme4{ background-color:#00539c;color:#ffd662;}
+.theme5{ background-color:#ffd662;color:#444;}
+.theme6{ background-color:black;color:#ffd662;}
+.theme7{ background-color:#00539c;color:white;}
+.theme8{ background-color:white;color:#00539c;}
+
+body.font1 {font-family: 'Georgia', sans-serif;}
+body.font2 {font-family: 'Helvetica', sans-serif;}
+body.font3 {font-family: 'PT Sans', sans-serif;}
+body.font4 {font-family: 'Open Sans', sans-serif;}
+body.font5 {font-family: 'Quicksand', sans-serif;}
+body.font6 {font-family: 'Verdana', sans-serif;}
+body.font7 {font-family: 'Rooney', sans-serif;}
+body.font8 {font-family: 'Karla', sans-serif;}
+body.font9 {font-family: 'Roboto', sans-serif;}
+body.font10 {font-family: 'Ubuntu', sans-serif;}
+body.font11 {font-family: 'Lato', sans-serif;}
+body.font12 {font-family: 'Futura', sans-serif;}
 
 body::after {
 	position:fixed;
@@ -35,6 +82,7 @@ body::after {
 body.loaded::after{
 	display:none
 }
+
 
 /*
  Blinds
@@ -56,7 +104,32 @@ body.loaded::after{
 	background-image: linear-gradient( transparent, white );
 }
 
+.loaded #main::before { background-image: linear-gradient( white, transparent);}
+.loaded #main::after  { background-image: linear-gradient( transparent, white);}
 
+.theme1.loaded #main::before { background-image: linear-gradient( white, transparent);}
+.theme1.loaded #main::after  { background-image: linear-gradient( transparent, white);}
+
+.theme2.loaded #main::before { background-image: linear-gradient( black, transparent);}
+.theme2.loaded #main::after  { background-image: linear-gradient( transparent, black);}
+
+.theme3.loaded #main::before { background-image: linear-gradient( #ffd662, transparent);}
+.theme3.loaded #main::after  { background-image: linear-gradient( transparent,#ffd662 );}
+
+.theme4.loaded #main::before { background-image: linear-gradient( #00539c, transparent);}
+.theme4.loaded #main::after  { background-image: linear-gradient( transparent,#00539c );}
+
+.theme5.loaded #main::before { background-image: linear-gradient( #ffd662, transparent);}
+.theme5.loaded #main::after  { background-image: linear-gradient( transparent,#ffd662 );}
+
+.theme6.loaded #main::before { background-image: linear-gradient( black, transparent);}
+.theme6.loaded #main::after  { background-image: linear-gradient( transparent,black );}
+
+.theme7.loaded #main::before { background-image: linear-gradient( #00539c, transparent);}
+.theme7.loaded #main::after  { background-image: linear-gradient( transparent, #00539c);}
+
+.theme8.loaded #main::before { background-image: linear-gradient( white, transparent);}
+.theme8.loaded #main::after  { background-image: linear-gradient( transparent,white );}
 #main {
 	min-height: 100%;
 	border: none;;
@@ -103,24 +176,32 @@ display: flex;
 .settings-page  div{
 	display: flex; 
 	flex-direction: column;
+	margin-bottom: 2rem;
 	
 }
 .settings-page  label{
 	font-weight: bold;
 	color : #444;
-	font-size: 1rem;
+	font-size: 1.5rem;
+	margin-bottom: 1rem;
 }
 .settings-page input{
 	width: 100%;
 }
-.color-picker div {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: stretch;
-	height: 6rem;
+.settings-page input[type=text]{
+	font-size: 1.5rem;
+	padding: 1rem;
 }
-.color-picker span{
+.settings-page .color-picker {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: stretch;
+}
+.settings-page .color-picker [type=radio]{
+display:none;
+}
+.settings-page .color-picker  label {
 	display: block;
 	height: 10vw;
 	width: 10vw;
@@ -131,8 +212,9 @@ display: flex;
 	margin: 1vw;
 	font-weight: bold;
 	font-size: 1vw;
+	cursor: pointer;
 }
-.color-picker .color1 {
+.settings-page .color-picker .color1 {
 	background-color: white;
 	color: black;
 }
@@ -141,35 +223,37 @@ display: flex;
         color: white;
 }
 .color-picker .color3 {
-        background-color: yellow;
-        color: blue;
+        background-color: #ffd662;
+        color: #00539c;
 }
 .color-picker .color4 {
-        background-color: blue;
-        color: yellow;
+        background-color: #00539c;
+        color:  #ffd662;
 }
 
 .color-picker .color5 {
-        background-color: yellow;
+        background-color: #ffd662;
         color: black;
 }
 
 .color-picker .color6 {
         background-color: black;
-        color: yellow;
+        color: #ffd662;
 }
 
 .color-picker .color7 {
-        background-color: blue;
+        background-color:  #00539c;
         color: white;
 }
 .color-picker .color8 {
         background-color: white;
-        color: blue;
+        color: #00539c;
 }
-
-.default {
+.color-picker [type=radio]:not(:checked):hover+label{
 box-shadow: 0px 0px 8px -2px  #444;
+}
+.color-picker [type=radio]:checked+label {
+box-shadow: inset 0px 0px 8px -2px  #444;
 }
 </style>
 </head>
@@ -178,21 +262,39 @@ box-shadow: 0px 0px 8px -2px  #444;
 	<main role="main" id="main"></main>
 <aside class="settings-page">
 <h2>settings</h2>
-<div><label for="volume">set your speed</label><input type="range" id="speed" name="speed" min="0" max="9"></div>
 
-<div class='color-picker'>
+<div><label for="fileuri">fileuri</label><input type="text" id="fileuri" name="fileuri"></div>
+<div><label for="speed">set your speed</label><input type="range" id="speed" name="speed" min="0" max="9"></div>
+<div> 
 	<label>choose your color</label>
-	<div>
-	<span class='default color1'>Black on White</span>
-	<span class='color2'>White on Black</span>
-	<span class='color3'>Blue on Yellow</span>
-	<span class='color4'>Yellow on Blue</span>
-	<span class='color5'>Black on Yellow</span>
-	<span class='color6'>Yellow on Black</span>
-	<span class='color7'>White on Blue</span>
-	<span class='color8'>Blue on White</span>
+	<div class="color-picker">
+	<input type="radio" name="color" id="blackwhite" value="1">
+	<label for="blackwhite" class='default color1'>Black on White</label>
+
+	<input type="radio" name="color" id="whiteblack" value="2">
+	<label for="whiteblack" class='color2'>White on Black</label>
+
+	<input type="radio" name="color" id="blueyellow" value="3">
+	<label for="blueyellow" class='color3'>Blue on Yellow</label>
+
+	<input type="radio" name="color" id="yellowblue" value="4">
+	<label for="yellowblue" class='color4'>Yellow on Blue</label>
+
+	<input type="radio" name="color" id="blackyellow" value="5">
+	<label for="blackyellow" class='color5'>Black on Yellow</label>
+
+	<input type="radio" name="color" id="yellowblack" value="6">
+	<label for="yellowblack" class='color6'>Yellow on Black</label>
+
+	<input type="radio" name="color" id="whiteblue" value="7">
+	<label for="whiteblue" class='color7'>White on Blue</label>
+
+	<input type="radio" name="color" id="bluewhite" value="8">
+	<label for="bluewhite" class='color8'>Blue on White</label>
 	</div>
 </div>
+<div>
+	<label for="font">Calm your eyes</label><input type="range" id="font" name="font" min="0" max="12"></div>
 
 </aside>
 </body>
@@ -218,6 +320,18 @@ box-shadow: 0px 0px 8px -2px  #444;
 
 	        document.addEventListener('settings', function (e) {
                 	document.body.classList.toggle("settings");
+        	}, false);
+	        
+		document.addEventListener('settings-color', function (e) {
+                	document.body.classList.remove(`theme1`);
+                	document.body.classList.remove(`theme2`);
+                	document.body.classList.remove(`theme3`);
+                	document.body.classList.remove(`theme4`);
+                	document.body.classList.remove(`theme5`);
+                	document.body.classList.remove(`theme6`);
+                	document.body.classList.remove(`theme7`);
+                	document.body.classList.remove(`theme8`);
+                	document.body.classList.add(`theme${e.detail}`);
         	}, false);
 	})();
 ;( function SCROLLER (){
@@ -397,7 +511,10 @@ box-shadow: 0px 0px 8px -2px  #444;
 	}, false);
 	
 	document.addEventListener("mousedown", function(e){
+		if ( e.target.closest("main") ){
+	
 		pause();	
+		}
 	}, false);
 
 	document.addEventListener("mouseup", function(e){
@@ -472,5 +589,21 @@ box-shadow: 0px 0px 8px -2px  #444;
 			const customEvent = new CustomEvent('settings');
                         document.dispatchEvent(customEvent);
         }, false);
+})();
+
+;( function SETTINGS_CONTROLS(){
+	console.log("aaa")
+        document.addEventListener("change",  function(event) {
+	console.log(event)
+		const t =  event.target.closest(".color-picker");
+                if ( t ){
+	
+		const choice = document.querySelector('.settings-page .color-picker input[type=radio]:checked').value
+		console.log(choice)
+                        const customEvent = new CustomEvent('settings-color',{detail:choice });
+                        document.dispatchEvent(customEvent);
+                }
+        }, false);
+
 })();
 </script>
