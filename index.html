@@ -3,32 +3,6 @@
 <head>
 	<link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
 <style>
-
-
-/*
-
-	Fonts:
-
-		Georgia
-Helvetica
-PT Sans & PT Serif
-Open Sans
-
-Quicksand
-
-Verdana
-Rooney
-
-Karla
-Roboto
-Ubuntu
-Lato
-Futura
-
-
-
-
-*/
 html {
 	font-size: 62.5%;
 	height 100%;
@@ -43,89 +17,31 @@ body {
 }
 
 
-.theme1{ background-color:white;color:#444;}
-.theme2{ background-color:black;color:white;}
-.theme3{ background-color: #ffd662;color:#00539c;}
-.theme4{ background-color:#00539c;color:#ffd662;}
-.theme5{ background-color:#ffd662;color:#444;}
-.theme6{ background-color:black;color:#ffd662;}
-.theme7{ background-color:#00539c;color:white;}
-.theme8{ background-color:white;color:#00539c;}
-
-.theme1 .sample-text { background-color:white;color:#444;}
-.theme2 .sample-text { background-color:black;color:white;}
-.theme3 .sample-text { background-color: #ffd662;color:#00539c;}
-.theme4 .sample-text { background-color:#00539c;color:#ffd662;}
-.theme5 .sample-text { background-color:#ffd662;color:#444;}
-.theme6 .sample-text { background-color:black;color:#ffd662;}
-.theme7 .sample-text { background-color:#00539c;color:white;}
-.theme8 .sample-text { background-color:white;color:#00539c;}
-body.font1 {font-family: 'Georgia', sans-serif;}
-body.font2 {font-family: 'Helvetica', sans-serif;}
-body.font3 {font-family: 'PT Sans', sans-serif;}
-body.font4 {font-family: 'Open Sans', sans-serif;}
-body.font5 {font-family: 'Quicksand', sans-serif;}
-body.font6 {font-family: 'Verdana', sans-serif;}
-body.font7 {font-family: 'Rooney', sans-serif;}
-body.font8 {font-family: 'Karla', sans-serif;}
-body.font9 {font-family: 'Roboto', sans-serif;}
-body.font10 {font-family: 'Ubuntu', sans-serif;}
-body.font11 {font-family: 'Lato', sans-serif;}
-body.font12 {font-family: 'Futura', sans-serif;}
-
-body::after {
-	position:fixed;
-	top: 50%;
-	left:50%;
-	z-index: 100;
-	transform: translate(-50%, -50%);
-	content:"drag a file here to get started. <esc> or double click for settings";
-	text-align: center;
-        overflow-wrap: break-word;
-        font-size: 5rem;
-        text-transform:uppercase;
-        color: #d1d1d1;
-	pointer-events:none;
-}
-body.loaded::after{
-display:none;
-}
-.loaded #main::before { background-image: linear-gradient( white, transparent);}
-.loaded #main::after  { background-image: linear-gradient( transparent, white);}
-
-.theme1.loaded #main::before { background-image: linear-gradient( white, transparent);}
-.theme1.loaded #main::after  { background-image: linear-gradient( transparent, white);}
-
-.theme2.loaded #main::before { background-image: linear-gradient( black, transparent);}
-.theme2.loaded #main::after  { background-image: linear-gradient( transparent, black);}
-
-.theme3.loaded #main::before { background-image: linear-gradient( #ffd662, transparent);}
-.theme3.loaded #main::after  { background-image: linear-gradient( transparent,#ffd662 );}
-
-.theme4.loaded #main::before { background-image: linear-gradient( #00539c, transparent);}
-.theme4.loaded #main::after  { background-image: linear-gradient( transparent,#00539c );}
-
-.theme5.loaded #main::before { background-image: linear-gradient( #ffd662, transparent);}
-.theme5.loaded #main::after  { background-image: linear-gradient( transparent,#ffd662 );}
-
-.theme6.loaded #main::before { background-image: linear-gradient( black, transparent);}
-.theme6.loaded #main::after  { background-image: linear-gradient( transparent,black );}
-
-.theme7.loaded #main::before { background-image: linear-gradient( #00539c, transparent);}
-.theme7.loaded #main::after  { background-image: linear-gradient( transparent, #00539c);}
-
-.theme8.loaded #main::before { background-image: linear-gradient( white, transparent);}
-.theme8.loaded #main::after  { background-image: linear-gradient( transparent,white );}
 #preview {
-	width: 100%;
-	height: 100%;
-	position:fixed;top:0;left:0;right:0;bottom:0;z-index: 10;
-}
-#videopanel {
 	position:fixed;
-	bottom: 5px;left:5px;right:5px;
-	z-index: 100;
+	top:10vh;
+	left: -200vw;
+	right:0;
+	bottom:10vh;
+	z-index: 10;
+	width: 100%;
 }
+.paused #preview{
+	left: 0;
+}
+#recording{
+	display:block;
+	position:fixed;
+	top: auto;
+	left:1vw;
+	right: auto;
+	bottom:1vh;
+	z-index: 10;
+}
+.paused #recording{
+	dxisplay:none;
+}
+
 #maintext {
 	position: relative;
 	z-index: 50;
@@ -156,193 +72,37 @@ display:none;
 	top:0;
 	width: 100%;
 }
-.settings .settings-page {
-display: flex;
-}
 
-.settings-page {
-	position: fixed;
-	border: 5px solid #d1d1d1;
-	top:1rem;
-	left: 1rem;
-	right: 1rem;
-	bottom:1rem;
-	background-color: rgba(255,255,255,.9);
-	display: none;
-	flex-direction:column;
-	z-index: 1000;
-	padding: 3rem;
-}
-
-.settings-page  div{
-	display: flex; 
-	flex-direction: column;
-	margin-bottom: 2rem;
-	
-}
-.settings-page h2 {
-	line-height: 4rem;
-	font-size: 2rem;
-	height: 4rem;
-	text-transform: uppercase;
-}
-.settings-page  label{
-	font-weight: bold;
-	color : #444;
-	font-size: 1.8rem;
-	margin-bottom: 1rem;
-	line-height: 4rem;
-	height: 4rem;
-	xborder: 1px solid red;
-}
-
-.settings-page .sample-text {
-	overflow-y: auto;
-	height: 300px;
-}
-.settings-page input{
-	width: 100%;
-}
-.settings-page input[type=text]{
-	font-size: 1.5rem;
-	padding: 1rem;
-}
-.settings-page .color-picker {
-	display: flex;
-	flex-direction: row;
-	justify-content: space-between;
-	align-items: stretch;
-}
-.settings-page .color-picker [type=radio]{
-display:none;
-}
-.settings-page .color-picker  label {
-	display: block;
-	height: 10vw;
-	width: 10vw;
-	border-radius: 5px;
-	border: 1px solid #d1d1d1;
-	display: flex;
-	justify-content: center;
+#controls {
+	position:fixed;
+	bottom:0;
+	left:0;
+	right:0;
+	display:flex;
+	flex-direction:row;
 	align-items:center;
-	margin: 1vw;
-	font-weight: bold;
-	font-size: 1vw;
-	cursor: pointer;
+	justify-content:center;
+	z-index: 10000;
 }
-.settings-page .color-picker .color1 {
-	background-color: white;
-	color: black;
-}
-.color-picker .color2 {
-        background-color: black;
-        color: white;
-}
-.color-picker .color3 {
-        background-color: #ffd662;
-        color: #00539c;
-}
-.color-picker .color4 {
-        background-color: #00539c;
-        color:  #ffd662;
+#controls .button {
+        padding:1rem;
+        margin: 1rem;
 }
 
-.color-picker .color5 {
-        background-color: #ffd662;
-        color: black;
-}
-
-.color-picker .color6 {
-        background-color: black;
-        color: #ffd662;
-}
-
-.color-picker .color7 {
-        background-color:  #00539c;
-        color: white;
-}
-.color-picker .color8 {
-        background-color: white;
-        color: #00539c;
-}
-.color-picker [type=radio]:not(:checked):hover+label{
-box-shadow: 0px 0px 8px -2px  #444;
-}
-.color-picker [type=radio]:checked+label {
-box-shadow: inset 0px 0px 8px -2px  #444;
-}
 </style>
 </head>
-<body class="droptarget">
+<body class="droptarget paused">
 	<progress id="progress-bar" max=100 value=0></progress>
 	<main role="main" id="main">
-		<video id="preview" autoplay muted></video>
+		<video id="preview" width="500" height="240" autoplay muted></video>
+		<video id="recording" width="160" height="120" autoplay muted></video>
 		<div id="maintext"></div>
-
-
-
-   <div id="videopanel">
-        <button id="startButton" class="button">Start</button>
-        <h2>Preview</h2>
-        <button id="stopButton" class="button">Stop</button>
-        <h2>Recording</h2>
-        <video id="recording" width="160" height="120" controls></video>
-        <a id="downloadButton" class="button"> Download</a>
-    </div>
-
+		<div id="controls">
+			<button id="startButton" class="button">Start</button>
+			<button id="stopButton" class="button">Stop</button>
+			<a id="downloadButton" class="button"> Download</a>
+		</div>
 	</main>
-<aside class="settings-page">
-<h2>settings</h2>
-
-<div><label for="fileuri">fileuri</label><input type="text" id="fileuri" name="fileuri"></div>
-<div> 
-	<label>choose your color</label>
-	<div class="color-picker">
-	<input type="radio" name="color" id="blackwhite" value="1">
-	<label for="blackwhite" class='default color1'>Black on White</label>
-
-	<input type="radio" name="color" id="whiteblack" value="2">
-	<label for="whiteblack" class='color2'>White on Black</label>
-
-	<input type="radio" name="color" id="blueyellow" value="3">
-	<label for="blueyellow" class='color3'>Blue on Yellow</label>
-
-	<input type="radio" name="color" id="yellowblue" value="4">
-	<label for="yellowblue" class='color4'>Yellow on Blue</label>
-
-	<input type="radio" name="color" id="blackyellow" value="5">
-	<label for="blackyellow" class='color5'>Black on Yellow</label>
-
-	<input type="radio" name="color" id="yellowblack" value="6">
-	<label for="yellowblack" class='color6'>Yellow on Black</label>
-
-	<input type="radio" name="color" id="whiteblue" value="7">
-	<label for="whiteblue" class='color7'>White on Blue</label>
-
-	<input type="radio" name="color" id="bluewhite" value="8">
-	<label for="bluewhite" class='color8'>Blue on White</label>
-	</div>
-</div>
-<div><label for="speed">Adjust Speed</label><input type="range" id="speed" name="speed" min="0" max="9"></div>
-<div><label for="font">Adjust Font</label><input type="range" id="font" name="font" min="0" max="12"></div>
-<div>
-<p class="sample-text">
-The path of the righteous man is beset on all sides by the iniquities of the selfish and the tyranny of evil men. Blessed is he who, in the name of charity and good will, shepherds the weak through the valley of darkness, for he is truly his brother's keeper and the finder of lost children. And I will strike down upon thee with great vengeance and furious anger those who would attempt to poison and destroy My brothers. And you will know My name is the Lord when I lay My vengeance upon thee.
-<br><br>
-Now that we know who you are, I know who I am. I'm not a mistake! It all makes sense! In a comic, you know how you can tell who the arch-villain's going to be? He's the exact opposite of the hero. And most times they're friends, like you and me! I should've known way back when... You know why, David? Because of the kids. They called me Mr Glass.
-
-<br><br>
-
-Well, the way they make shows is, they make one show. That show's called a pilot. Then they show that show to the people who make shows, and on the strength of that one show they decide if they're going to make more shows. Some pilots get picked and become television programs. Some don't, become nothing. She starred in one of the ones that became nothing.
-
-<br><br>
-You think water moves fast? You should see ice. It moves like it has a mind. Like it knows it killed the world once and got a taste for murder. After the avalanche, it took us a week to climb out. Now, I don't know exactly when we turned on each other, but I know that seven of us survived the slide... and only five made it out. Now we took an oath, that I'm breaking now. We said we'd say it was the snow that killed the other two, but it wasn't. Nature is lethal but it doesn't hold a candle to man.
-</p>
-</div>
-
-</aside>
-
-
 </body>
 </html>
 <script>
@@ -356,48 +116,13 @@ You think water moves fast? You should see ice. It moves like it has a mind. Lik
         		document.body.classList.add("paused");
 		});
 
-        	document.addEventListener('unpause', function (e) {
+        	document.addEventListener('play', function (e) {
         		document.body.classList.remove("paused");
         	});
 
 	        document.addEventListener('userloadedfile', function (e) {
                 	document.body.classList.add("loaded");
         	}, false);
-
-	        document.addEventListener('settings', function (e) {
-                	document.body.classList.toggle("settings");
-        	}, false);
-	        
-		document.addEventListener('settings-color', function (e) {
-                	document.body.classList.remove(`theme1`);
-                	document.body.classList.remove(`theme2`);
-                	document.body.classList.remove(`theme3`);
-                	document.body.classList.remove(`theme4`);
-                	document.body.classList.remove(`theme5`);
-                	document.body.classList.remove(`theme6`);
-                	document.body.classList.remove(`theme7`);
-                	document.body.classList.remove(`theme8`);
-                	document.body.classList.add(`theme${e.detail}`);
-        	}, false);
-
-
-
-		document.addEventListener('settings-font', function (e) {
-                	document.body.classList.remove(`font1`);
-                	document.body.classList.remove(`font2`);
-                	document.body.classList.remove(`font3`);
-                	document.body.classList.remove(`font4`);
-                	document.body.classList.remove(`font5`);
-                	document.body.classList.remove(`font6`);
-                	document.body.classList.remove(`font7`);
-                	document.body.classList.remove(`font8`);
-                	document.body.classList.remove(`font9`);
-                	document.body.classList.remove(`font10`);
-                	document.body.classList.remove(`font11`);
-                	document.body.classList.remove(`font12`);
-                	document.body.classList.add(`font${e.detail}`);
-        	}, false);
-
 
 	})();
 ;( function SCROLLER (){
@@ -418,7 +143,7 @@ You think water moves fast? You should see ice. It moves like it has a mind. Lik
 	});
 	
 
-	document.addEventListener('unpause', function (e) {
+	document.addEventListener('play', function (e) {
 		PAUSED=false;
 	});
 	
@@ -438,136 +163,67 @@ You think water moves fast? You should see ice. It moves like it has a mind. Lik
 
 ;(function RECORDVIDEO(){
 
+	let preview = document.getElementById("preview");
+	let recording = document.getElementById("recording");
+	let downloadButton = document.getElementById("downloadButton");
+
+	const previewer = navigator.mediaDevices.getUserMedia({
+		video: true,
+		audio: false
+	}).then(stream => {
+		preview.srcObject = stream;
+	});
 
 
-let preview = document.getElementById("preview");
-    let recording = document.getElementById("recording");
-    let startButton = document.getElementById("startButton");
-    let stopButton = document.getElementById("stopButton");
-    let downloadButton = document.getElementById("downloadButton");
-    let logElement = document.getElementById("log");
+	function startRecording(stream) {
+        	let recorder = new MediaRecorder(stream);
+        	let data = [];
 
-    let recordingTimeMS = 5000;
+        	recorder.ondataavailable = event => data.push(event.data);
+        	recorder.start();
 
+        	let stopped = new Promise((resolve, reject) => {
+        		recorder.onstop = resolve;
+        		recorder.onerror = event => reject(event.name);
+        	});
 
-    function log(msg) {
-        //logElement.innerHTML += msg + "\n";
-    }
-
-    function wait(delayInMS) {
-        return new Promise(resolve => setTimeout(resolve, delayInMS));
-    }
-
-    function startRecording(stream, lengthInMS) {
-        let recorder = new MediaRecorder(stream);
-        let data = [];
-
-        recorder.ondataavailable = event => data.push(event.data);
-        recorder.start();
-        log(recorder.state + " for " + (lengthInMS/1000) + " seconds...");
-
-        let stopped = new Promise((resolve, reject) => {
-        recorder.onstop = resolve;
-        recorder.onerror = event => reject(event.name);
-        });
-
-        let recorded = wait(lengthInMS).then(
-        () => recorder.state == "recording" && recorder.stop()
-        );
-
-        return Promise.all([
-            stopped,
-            recorded
-        ])
-        .then(() => data);
-    }
-
-    function stop(stream) {
-        stream.getTracks().forEach(track => track.stop());
-    }
-
-    startButton.addEventListener("click", function() {
-        navigator.mediaDevices.getUserMedia({
-            video: true,
-            audio: false
-        }).then(stream => {
-                preview.srcObject = stream;
-                downloadButton.href = stream;
-                preview.captureStream = preview.captureStream || preview.mozCaptureStream;
-                return new Promise(resolve => preview.onplaying = resolve);
-              }).then(() => startRecording(preview.captureStream(), recordingTimeMS))
-              .then (recordedChunks => {
-                let recordedBlob = new Blob(recordedChunks, { type: "video/webm" });
-                recording.src = URL.createObjectURL(recordedBlob);  
-                downloadButton.href = recording.src;
-                downloadButton.download = "RecordedVideo.webm";
-
-                log("Successfully recorded " + recordedBlob.size + " bytes of " +
-                    recordedBlob.type + " media.");
-              })
-              .catch(log);
-        }, false);
+        	return Promise.all([
+        	    stopped
+        	]).then(function() {
+			return data;
+		});
+    	}
 
 
-        stopButton.addEventListener("click", function() {
-        stop(preview.srcObject);
-        }, false);
+	document.addEventListener('play', function (e) {
 
+       		navigator.mediaDevices.getUserMedia({
+       		    video: true,
+       		    audio: true
+       		}).then(stream => {
+        	        recording.captureStream = recording.captureStream || recording.mozCaptureStream;
+        	        return new Promise(resolve => recording.onplaying = resolve);
+		}).then( function(){
+			return startRecording(recording.captureStream());
+		}).then (recordedChunks => {
+        	        let recordedBlob = new Blob(recordedChunks, { type: "video/webm" });
+        	        recording.src = URL.createObjectURL(recordedBlob);  
+        	        downloadButton.href = recording.src;
+        	        downloadButton.download = `magnificent_octopus_${new Date().getTime()}.webm`;
+	
+	                console.log("Successfully recorded " + recordedBlob.size + " bytes of " + recordedBlob.type + " media.");
+		}).catch(function(err){
+			console.log(err);
+		});
+         });
 
+         document.addEventListener('pause', function (e) {
+		recording.srcObject.getTracks().forEach(track => track.stop());
+         });
 
 
 
 })();
-
-;(function GESTUREINTERFACE(){
-	let gesture = null;
-
-	function Gesture(e){
-		const { timeStamp:ta, clientX:xa, clientY:ya } = mouse_detail;
-		const { timeStamp:tb, clientX:xb, clientY:yb } = e;
-	}
-	Gesture.prototype.manifest = function( startGesture, mouseUp = false){
-		let swipe = new Event('swipe');
-		let slide= new Event('slide');
-		let longpress = new Event('longpress');
-
-
-		this.distanceX = Math.abs( xb - xa);
-		this.distanceY = Math.abs(yb - ya);
-		this.directionX = Math.sign( xb-xa );
-		this.directionY = Math.sign( yb-ya);
-		this.time  = tb-ta;
-		this.speedX = distanceX/time;
-		this.speedY = distanceY/time;
-
-		const maxDist = Math.max( this.distanceX, this.distanceY );
-		const maxSpeed = Math.max( this.speedX, this.speedY );
-
-		if ( time < 800 && maxDist > 120 &&  maxDist < 300 && maxSpeed < 200) { // swipe
-		
-		}
-
-		if ( time > 800 && time < 1500 && maxDist > 300){ // slide
-		
-		}
-
-		if ( time > 1500 && time < 2000 ){ // long press
-		
-		}
-		document.dispatchEvent(event);
-	}
-
-	document.addEventListener("mousedown", function(e){
-//		mouse_detail = new Gesture(e);
-	})
-	document.addEventListener("mouseup", function(e){
-//		gesture.manifest(  new Gesture(e), true );
-	});
-	document.addEventListener("mousemove", function(e){
-//		gesture.manifest(  new Gesture(e) );
-	});
-
-});
 
 
 ;( function FILEDRAG(){
@@ -626,144 +282,24 @@ let preview = document.getElementById("preview");
 
 
 ;( function BASIC_CONTROLS(){
+         let startButton = document.getElementById("startButton");
+         let stopButton = document.getElementById("stopButton");
 
-	let PAUSED = false;
 
-	function pause(){
-	   const event = new CustomEvent('pause');
+        function pause(){
+           const event = new CustomEvent('pause');
            document.dispatchEvent(event);
-		PAUSED=true;
-	}
-	function unpause(){
-	   const event = new CustomEvent('unpause');
+        }
+        function play(){
+           const event = new CustomEvent('play');
            document.dispatchEvent(event);
-		PAUSED=false;
-	}
+        }
 
-	document.addEventListener("keydown",  function(event) {
-		if (event.code === 'Space') {
-			event.preventDefault();
-
-			if ( PAUSED === true ){
-				unpause();
-			} else {
-				pause();
-			}
-		}
-
-	}, false )
-	
-
-	document.addEventListener("manualscroll", function(e){
-		pause();
-	}, false);
-	
-	document.addEventListener("mousedown", function(e){
-		if ( e.target.closest("main") ){
-	
-		pause();	
-		}
-	}, false);
-
-	document.addEventListener("mouseup", function(e){
-		unpause();
-	}, false);
-
-	document.addEventListener("touchstart", function(e){
-			//PAUSED =true;
-	}, false);
-	document.addEventListener("touchend", function(e){
-			//PAUSED = false;
-	}, false);
-
+        startButton.addEventListener("click",play);
+        stopButton.addEventListener("click",pause);
 
 })();
 
-;( function USER_SCROLL_EVENT(){
-
-	let MANUAL_SCROLL=false;
-
-	const main = document.body; //getElementById("main");
-
-	document.addEventListener("keyup",  function(event) {
-		if ( [33,34,38,40].includes(event.keyCode) ){
-			MANUAL_SCROLL=true;
-		}
-		if ( [35,36].includes(event.keyCode) && event.ctrlKey ){
-			MANUAL_SCROLL=true;
-		}
-	}, false);
-
-	document.addEventListener("mousemove", function(e){
-//			MANUAL_SCROLL=true;
-	}, false);
-
-	document.addEventListener("wheel", function(e){
-			MANUAL_SCROLL=true;
-	}, false);
-
-	document.addEventListener('scroll', function(e) {
-		if ( MANUAL_SCROLL ){
-			const event = new CustomEvent('manualscroll');
-			document.dispatchEvent(event);
-			MANUAL_SCROLL = false;
-		}
-	});
-
-
-
-})();
-
-;( function SPEED_DIAL(){
-	const fib = [0,1,2,3,5,7,9,13, 15,21];
-        document.addEventListener("keydown",  function(event) {
-                if ( [ 48, 49, 50, 51, 52, 53, 54, 55, 56, 57 ].includes(event.keyCode) ){
-			const customEvent = new CustomEvent('speedchange', { detail:fib[event.keyCode-48] });
-                        document.dispatchEvent(customEvent);
-                }
-        }, false);
-
-})();
-
-;( function SETTINGS_DISPLAY_CONTROL(){
-
-        document.addEventListener("keyup",  function(event) {
-                if ( [27].includes(event.keyCode) ){
-			const customEvent = new CustomEvent('settings');
-                        document.dispatchEvent(customEvent);
-                }
-        }, false);
-        document.addEventListener("dblclick",  function(event) {
-			const customEvent = new CustomEvent('settings');
-                        document.dispatchEvent(customEvent);
-        }, false);
-})();
-
-;( function SETTINGS_THEME_COLOR(){
-        document.addEventListener("change",  function(event) {
-		const t =  event.target.closest(".color-picker");
-                if ( t ){
-			const choice = document.querySelector('.settings-page .color-picker input[type=radio]:checked').value
-                	const customEvent = new CustomEvent('settings-color',{detail:choice });
-                	document.dispatchEvent(customEvent);
-                }
-        }, false);
-
-})();
-
-
-;( function SETTINGS_THEME_FONT(){
-        document.addEventListener("input",  function(event) {
-		const t =  event.target.closest("[name=font]");
-
-                if ( t ){
-			const choice = event.target.value
-                	const customEvent = new CustomEvent('settings-font',{detail:choice });
-                	document.dispatchEvent(customEvent);
-                }
-        }, false);
-
-})();
 
 
 </script>
