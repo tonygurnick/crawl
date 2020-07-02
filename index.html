@@ -6,6 +6,10 @@ html {
 	font-size: 62.5%;
 	height 100%;
 }
+body{
+        height: 100%;
+        scroll-behavior: smooth;
+}
 .recording #preview1 {
 	visibility:hidden;
 }
@@ -48,10 +52,31 @@ html {
         padding:1rem;
         margin: 1rem;
 }
+.dragging {
+	background-color: red;
+}
+video {
+	pointer-events:none;
+	z-index: 10;
+}
+main {
+	z-index: 100;
+	position:relative;
+        min-height: 100%;
+        border: none;
+        overflow-wrap: break-word;
+        margin: 0;
+        box-sizing: border-box;
+        padding: 50% 25%;
+        font-size: 7rem;
+        line-height: 2;
+        text-align: left;
 
+}
 </style>
 </head>
-<body class="droptarget stopped">
+<body id="scrollContainer" class="droptarget stopped">
+<main id="textContainer"></main>
 		<video id="preview1" autoplay muted></video>
 		<video id="preview2" width="160" height="120" autoplay muted></video>
 		<div id="controls">
@@ -71,6 +96,27 @@ const promptly = {
 	mediaType: "video/h265",
 	majorView: null,
 	minorView:null,
+	scrollableElementId: "scrollContainer",
+	textContainerElementId:"textContainer",
+	speed:1,
+	paused:true,
+	filename:"",
+	preventDefault:function(e){
+		e.preventDefault();	
+	},
+	setDragging:function(){
+		document.body.classList.add("dragging");
+	},
+	unsetDragging:function(){
+		document.body.classList.remove("dragging");
+	},
+	setLoaded:function(){
+		document.body.classList.add("loaded");
+	},
+	dispatchUserLoadedFile(filename){
+		const event = new CustomEvent('userloadedfile', { detail: filename  } );
+		document.dispatchEvent(event);
+	},
 	cameraErrorHandler: function(error) {
 		const {name}=error;
 		if (name === 'ConstraintNotSatisfiedError') {
@@ -79,6 +125,15 @@ const promptly = {
  			console.error(`Permissions have not been granted to use your camera and microphone, you need to allow the page access to your devices`);
  		}
 		console.error(`getUserMedia error: ${name}`);
+	},
+	addCustomHandlers:function(){
+                document.addEventListener('dragover', this.preventDefault );
+                document.addEventListener("dragenter", this.setDragging, false);
+                document.addEventListener("dragleave", this.unsetDragging, false );
+                document.addEventListener("drop", this.preventDefault );
+                document.addEventListener("drop", this.unsetDragging );
+                document.addEventListener("drop", this.handleFileDrop.bind(this) );
+		document.addEventListener('userloadedfile', this.initScroll.bind(this) );
 	},
 	addDomHandlers:function() {
 		this.buttonStart.addEventListener("click", this.start.bind(this) );
@@ -90,6 +145,8 @@ const promptly = {
 		this.buttonStop = document.getElementById("stopButton");
 		this.container = document.body;
 		this.buttonDownload = document.getElementById("downloadButton");
+		this.scrollContainer = document.body;//document.getElementById(this.scrollableElementId);
+		this.textContainer = document.getElementById(this.textContainerElementId);
 	},
 	captureStream: function( mediaStream ){
 		this.cameraStream = mediaStream;
@@ -101,8 +158,6 @@ const promptly = {
                 this.videoPlayers.forEach( vidObj => {
                         vidObj.srcObject = this.cameraStream;
                 });
-	},
-	detachStreamFromDom:function(){
 	},
 	createRecorder: function(){
 		this.recorder = new MediaRecorder(this.cameraStream);
@@ -120,10 +175,12 @@ const promptly = {
 		}.bind(this)
 	},
 	start: function(){
+		this.paused=false;
 		this.container.classList.add("recording");
 		this.recorder.start();
 	},
 	stop: function(){
+		this.paused=true;
 		this.container.classList.remove("recording");
                 this.recorder.stop();
 	},
@@ -131,12 +188,92 @@ const promptly = {
 		this.attachStreamToDom();
 		this.createRecorder();
 	},
+	initScroll:function(evt){
+                this.scrollContainer.scrollTop=0;
+                this.speed=0;
+                this.textContainer.innerHTML=this.rawFileContent;//localStorage.getItem(evt.detail);
+	},
+	scrollLoop:function(){
+                if ( this.paused === false  ) {
+                        this.scrollContainer.scrollTop+=this.speed;
+                }
+                requestAnimationFrame(this.scrollLoop.bind(this));
+	},
 	go:function() {
 		this.captureDom();
 		this.addDomHandlers();
+		this.addCustomHandlers();
+                this.scrollLoop();
 		this.requestPermissions().then( this.onWithTheShow.bind(this,...arguments) ).catch(this.cameraErrorHandler);
+	},
+	stripHTML: function(html){
+		const span = document.createElement('span');
+		span.innerHTML = html;
+		return span.textContent || span.innerText;
+	},
+	handleFileRead:function(evt) {
+		this.rawFileContent= evt.target.result;
+		window.localStorage.setItem( this.filename, this.stripHTML(this.rawFileContent) );
+		this.dispatchUserLoadedFile(this.filename);
+	},
+	handleFileDrop:function(evt){
+
+		try {
+			const file = evt.dataTransfer.files[0];
+			this.filename = file.name;
+			const reader = new FileReader();
+			reader.onload = this.handleFileRead.bind(this);
+			reader.readAsText(file); // fires onload when done.
+		} catch (err) {
+			console.error(err)
+		}
 	}
 };
 
+
+
+
+
+
+
+
+
 promptly.go();
+
+/*
+
+;( function SCROLLER (){
+	let PAUSED = false;
+	let SPEED = 0;
+
+	const main = document.getElementById("maintext");
+	
+	function repeatOften() {
+		if ( PAUSED === false  ) {
+	        	document.body.scrollTop+=SPEED;
+		}
+	        requestAnimationFrame(repeatOften);
+	}
+
+	document.addEventListener('pause', function (e) {
+		PAUSED=true;	
+	});
+	
+
+	document.addEventListener('play', function (e) {
+		PAUSED=false;
+	});
+	
+	document.addEventListener('speedchange', function (e) {
+		SPEED=e.detail;
+	});
+	
+	document.addEventListener('userloadedfile', function (e) {
+		document.body.scrollTop=0;
+		SPEED=0;
+		main.innerHTML=localStorage.getItem(e.detail);
+		requestAnimationFrame(repeatOften);
+	}, false);
+
+})();*/
 </script>
