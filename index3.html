@@ -1,0 +1,300 @@
+<!doctype>
+<html>
+<head>
+	<link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+<style>
+
+html {
+	font-size: 62.5%;
+	height 100%;
+}
+body {
+	height: 100%;
+	scroll-behavior: smooth;
+	font-family: 'Roboto', sans-serif;
+	margin: 0;
+	padding:0;
+	color: #444;
+}
+
+
+body.loaded::after{
+display:none;
+}
+.paused #preview {
+	width: 100%;
+	height: 100%;
+	top:0;
+	left:0;
+	right:0;
+	bottom:0;
+}
+#preview {
+	width: 160px;
+	height: 120px;
+	bottom: 10px;
+	left: 10px;
+	top: auto;
+	right: auto;
+	position: fixed;
+	z-index: 10;
+}
+#videopanel {
+	position:fixed;
+	bottom: 5px;left:5px;right:5px;
+	z-index: 100;
+}
+#maintext {
+	position: relative;
+	z-index: 50;
+	min-height: 100%;
+	border: none;;
+	overflow-wrap: break-word;
+	margin: 0;
+	box-sizing: border-box;
+	padding: 50% 25%;
+	font-size: 7rem;
+	line-height: 2;
+	text-align: justify;
+}
+.playing-text,.paused-text {
+	padding: 2rem;
+	font-size: 6rem;
+	text-align : center;
+	position: fixed;
+	top:0;left:0;
+	width: 100%;
+	z-index: 100;
+	}
+.paused-text{
+	display:none;
+}
+.paused .paused-text {
+	display:block;
+}
+.paused .playing-text {
+	display: none;
+}
+.paused #main{background-color: transparent;}
+.dragging #main { background-color:#f1f1f1;}
+
+#controls {
+position:fixed;
+bottom:0;
+left:0;
+right:0;
+display:flex;
+flex-direction:row;
+align-items:center;
+justify-content:center;
+z-index: 10000;
+}
+#controls .button {
+	padding:1rem;
+	margin: 1rem;
+}
+</style>
+</head>
+<body class="paused droptarget">
+	<main role="main" id="main">
+		<video width="160" height="120" id="preview" autoplay muted></video>
+		<div id="maintext"></div>
+		<div id="controls">
+			<button id="startButton" class="button">Start</button>
+			<button id="stopButton" class="button">Stop</button>
+			<a id="downloadButton" class="button"> Download</a>
+		</div>
+	</main>
+	<div class="paused-text">PAUSED</div>
+	<div class="playing-text">PLAYING</div>
+</body>
+</html>
+<script>
+
+	// overview bar - or is that the scroll bar?
+	// and elapsed time and predicted finish time
+	// reading time dashboard presentation time/scrolling time/elapsed time.  time sofar and time to finish
+	;(function VIEWSTATE(){
+	
+	        document.addEventListener('pause', function (e) {
+        		document.body.classList.add("paused");
+		});
+
+        	document.addEventListener('play', function (e) {
+        		document.body.classList.remove("paused");
+        	});
+
+	        document.addEventListener('userloadedfile', function (e) {
+                	document.body.classList.add("loaded");
+        	}, false);
+
+	})();
+;( function SCROLLER (){
+	let PAUSED = false;
+	let SPEED = 0;
+
+	const main = document.getElementById("maintext");
+	
+	function repeatOften() {
+		if ( PAUSED === false  ) {
+	        	document.body.scrollTop+=SPEED;
+		}
+	        requestAnimationFrame(repeatOften);
+	}
+
+	document.addEventListener('pause', function (e) {
+		PAUSED=true;	
+	});
+	
+
+	document.addEventListener('play', function (e) {
+		PAUSED=false;
+	});
+	
+	document.addEventListener('speedchange', function (e) {
+		SPEED=e.detail;
+	});
+	
+	document.addEventListener('userloadedfile', function (e) {
+		document.body.scrollTop=0;
+		SPEED=0;
+		main.innerHTML=localStorage.getItem(e.detail);
+		requestAnimationFrame(repeatOften);
+	}, false);
+
+})();
+
+window.vwrecord = navigator.mediaDevices.getUserMedia({
+                        video: true,
+                        audio: true
+                });
+
+;(function PREVIEWVIDEO(){
+
+	let preview = document.getElementById("preview");
+	let startButton = document.getElementById("startButton");
+	let stopButton = document.getElementById("stopButton");
+ 
+		window.vwrecord
+		.then(stream => {
+                	preview.srcObject = stream;
+			preview.captureStream = preview.captureStream || preview.mozCaptureStream;
+		})
+		.catch(function(err){
+			console.log(err)
+		});
+})();
+
+;(function RECORDVIDEO(){
+
+		let preview = document.getElementById("preview");
+		let downloadButton = document.getElementById("downloadButton");
+
+                document.addEventListener('play', function (e) {
+
+			const stream = preview.captureStream()
+			const recorder = new MediaRecorder(stream);
+			const data = [];
+			recorder.ondataavailable = event => { console.log(data);data.push(event.data);}
+			recorder.start();
+
+			let stopped = new Promise((resolve, reject) => {
+				recorder.onstop = resolve;
+				recorder.onerror = event => reject(event.name);
+			});
+
+			return Promise.all([
+				stopped
+			])
+			.then( function(data){
+				let recordedBlob = new Blob(data, { type: "video/mp4" });
+				downloadButton.href = URL.createObjectURL(recordedBlob);
+				downloadButton.download = "RecordedVideo.mp4";
+				console.log("Successfully recorded " + recordedBlob.size + " bytes of " + recordedBlob.type + " media.");
+			}).catch( function(err){
+				console.log(err)
+			});
+
+		});
+		document.addEventListener('pause', function (e) {
+			const stream = preview.srcObject;
+			stream.getTracks().forEach(track => track.stop());
+		});
+})();
+
+
+;( function FILEDRAG(){
+
+		document.addEventListener('dragover', function (e) {
+			e.preventDefault();
+		});
+
+		document.addEventListener("dragenter", function (e) {
+			document.body.classList.add("dragging");
+		}, false);
+
+		document.addEventListener("dragleave", function (e) {
+			document.body.classList.remove("dragging");
+		}, false);
+
+		document.addEventListener("drop", async function (e) {
+			const {target} = e;
+			// prevent default action (open as link for some elements)
+			e.preventDefault();
+
+
+			try {
+				document.body.classList.remove("dragging");
+				const file = e.dataTransfer.files[0];
+				const filename = file.name;
+
+                		var reader = new FileReader();
+                		reader.onload = handleFileRead;
+
+                		function handleFileRead(e) {
+
+					 var span = document.createElement('span');
+  					span.innerHTML = e.target.result;
+  					const text = span.textContent || span.innerText;
+
+
+					window.localStorage.setItem( filename, text );
+			
+					const event = new CustomEvent('userloadedfile', { detail: filename  } );
+					document.dispatchEvent(event);
+				}
+
+				reader.readAsText(file); // fires onload when done.
+					
+			} catch (err) {
+				console.error(err)
+			} finally {
+			
+			}
+		}, false);
+
+
+
+})();
+
+
+;( function BASIC_CONTROLS(){
+         let startButton = document.getElementById("startButton");
+         let stopButton = document.getElementById("stopButton");
+ 
+
+	function pause(){
+	   const event = new CustomEvent('pause');
+           document.dispatchEvent(event);
+	}
+	function play(){
+	   const event = new CustomEvent('play');
+           document.dispatchEvent(event);
+	}
+
+	startButton.addEventListener("click",play);
+	stopButton.addEventListener("click",pause);
+	
+})();
+
+</script>

@@ -1,0 +1,216 @@
+<!doctype>
+<html>
+<head>
+<style>
+html {
+	font-size: 62.5%;
+	height 100%;
+}
+.stopped #preview1 {
+	visibility:visible;
+}
+.stopped #preview2 {
+	visibility:hidden;
+}
+#preview1 {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	visibility:hidden;
+}
+#preview2 {
+	position: fixed;
+	top: 1rem;
+	left: 1rem;
+	border: 1px solid #000;
+	width: 160px;
+	height: 120px;
+	visibility: visible;
+}
+
+#controls {
+	position:fixed;
+	bottom:5vh;
+	left:5vw;
+	right:5vw;
+	display:flex;
+	flex-direction:row;
+	align-items:center;
+	justify-content:center;
+	z-index: 10000;
+	background-color: rgba(255,255,255,.5);
+	border-rdius: .5rem;
+	box-shadow: 0 0 1rem rgba(128,128,128,.5);
+}
+#controls .button {
+        padding:1rem;
+        margin: 1rem;
+}
+
+</style>
+</head>
+<body class="droptarget stopped">
+		<video id="preview1" width="768" height="1024" autoplay muted></video>
+		<video id="preview2" width="160" height="120" autoplay muted></video>
+		<div id="controls">
+			<button id="startButton" class="button">record</button>
+			<button id="stopButton" class="button">stop</button>
+			<a id="downloadButton" class="button"> Download</a>
+		</div>
+</body>
+</html>
+<script>
+
+const settings = {
+	video: true,
+	audio: true
+};
+
+function cameraErrorHandler(error){
+	if (error.name === 'ConstraintNotSatisfiedError') {
+		console.error('The resolution ' + constraints.video.width.exact + 'x' +
+		constraints.video.height.exact + ' px is not supported by your device.');
+	} else if (error.name === 'PermissionDeniedError') {
+		console.error('Permissions have not been granted to use your camera and ' +
+		'microphone, you need to allow the page access to your devices in ' +
+		'order for the demo to work.');
+	}
+	console.error('getUserMedia error: ' + error.name, error);
+}
+
+const promptly = {
+	audio:true,
+	video:true,
+	cameraErrorHandler: function(error) {
+		const {name}=error;
+		if (name === 'ConstraintNotSatisfiedError') {
+ 			console.error(`The resolution ${constraints.video.width.exact}px ${constraints.video.height.exact}px is not supported by your device.`);
+ 		} else if (name === 'PermissionDeniedError') {
+ 			console.error(`Permissions have not been granted to use your camera and microphone, you need to allow the page access to your devices`);
+ 		}
+		console.error(`getUserMedia error: ${name}`);
+	},
+	requestPermissions: () => {
+		navigator.mediaDevices.getUserMedia(this).catch(this.cameraErrorHandler);
+	},
+	go:function(){
+		requestPermissions();
+
+	}
+};
+
+promptly.go();
+
+function captureStream(){
+	return window.camera.then(mediaStream => {
+		document.querySelectorAll('video').forEach( vidObj => {
+			vidObj.srcObject = mediaStream
+		});
+		return mediaStream;
+	});
+}
+
+		
+;(function VIEW(){
+	document.addEventListener('play', function (e) {
+		document.body.classList.remove("stopped");
+	});
+	document.addEventListener('stop', function (e) {
+		document.body.classList.add("stopped");
+	});
+})();
+
+;(function RECORD(){
+
+	captureStream();
+
+	const vid2 = document.getElementById("preview2");
+
+	vid2.onplaying = function(){
+		console.log("recording")
+	}
+
+	document.addEventListener('play', function (e) {
+		captureStream().then( function(mediaStream){
+                	let recorder = new MediaRecorder(mediaStream);
+                	let data = [];
+                
+                	recorder.ondataavailable = event => data.push(event.data);
+                	recorder.start();
+		});
+	});
+	document.addEventListener('stop', function (e) {
+		vid2.srcObject.getTracks().forEach(track => track.stop());
+		document.querySelectorAll('video').forEach( vidObj => {
+			vidObj.srcObject = cameraStream
+		});
+	});
+})();
+;(function RECORDVIDEO(){
+
+
+
+
+	function startRecording(stream) {
+        	let recorder = new MediaRecorder(stream);
+        	let data = [];
+
+        	recorder.ondataavailable = event => data.push(event.data);
+        	recorder.start();
+
+        	let stopped = new Promise((resolve, reject) => {
+        		recorder.onstop = resolve;
+        		recorder.onerror = event => reject(event.name);
+        	});
+
+        	return Promise.all([
+        	    stopped
+        	]).then(function() {
+			return data;
+		});
+    	}
+
+
+/*	document.addEventListener('play', function (e) {
+
+       		navigator.mediaDevices.getUserMedia({
+       		    video: true,
+       		    audio: true
+       		}).then(stream => {
+        	        recording.captureStream = recording.captureStream || recording.mozCaptureStream;
+        	        return new Promise(resolve => recording.onplaying = resolve);
+		}).then( function(){
+			return startRecording(recording.captureStream());
+		}).then (recordedChunks => {
+        	        let recordedBlob = new Blob(recordedChunks, { type: "video/webm" });
+        	        recording.src = URL.createObjectURL(recordedBlob);  
+        	        downloadButton.href = recording.src;
+        	        downloadButton.download = `magnificent_octopus_${new Date().getTime()}.webm`;
+	
+	                console.log("Successfully recorded " + recordedBlob.size + " bytes of " + recordedBlob.type + " media.");
+		}).catch(function(err){
+			console.log(err);
+		});
+         });
+
+         document.addEventListener('stop', function (e) {
+		recording.srcObject.getTracks().forEach(track => track.stop());
+         });
+*/
+
+
+})();
+
+;( function BASIC_CONTROLS(){
+        document.getElementById("startButton").addEventListener("click", function(){
+        	document.dispatchEvent( new CustomEvent('play') );
+        });
+
+        document.getElementById("stopButton").addEventListener("click", function(){
+		document.dispatchEvent( new CustomEvent('stop') );
+        });
+})();
+
+</script>
