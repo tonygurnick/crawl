@@ -68,6 +68,7 @@ const promptly = {
 	video:true,
 	videoData: [],
 	videoPlayers:[],
+	mediaType: "video/h265",
 	majorView: null,
 	minorView:null,
 	cameraErrorHandler: function(error) {
@@ -109,7 +110,7 @@ const promptly = {
 			this.videoData.push(event.data);
 		}
 		this.recorder.onstop = function(ev){
-			let recordedBlob = new Blob(this.videoData, { type: "video/mp4" });
+			let recordedBlob = new Blob(this.videoData, { type: this.mediaType });
 
  			this.videoPlayers[0].src = URL.createObjectURL(recordedBlob)
                         this.buttonDownload.href = this.videoPlayers[0].src;
