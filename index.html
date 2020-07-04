@@ -94,12 +94,13 @@ const promptly = {
 	video:true,
 	videoData: [],
 	videoPlayers:[],
-	mediaType: "video/h265",
+	mimeType: "video/webm; codecs=vp9",/*"video/h265",*/
+	ext:"webm",
 	majorView: null,
 	minorView:null,
 	scrollableElementId: "scrollContainer",
 	textContainerElementId:"textContainer",
-	speed:1,
+	speed:2,
 	paused:true,
 	filename:"",
 	preventDefault:function(e){
@@ -161,16 +162,29 @@ const promptly = {
                 });
 	},
 	createRecorder: function(){
-		this.recorder = new MediaRecorder(this.cameraStream);
+var options={ mimeType: this.mimeType};
+/*
+if (MediaRecorder.isTypeSupported('video/webm;codecs=vp9')) {
+  options = {mimeType: 'video/webm; codecs=vp9'};
+} else if (MediaRecorder.isTypeSupported('video/webm;codecs=vp8')) {
+   options = {mimeType: 'video/webm; codecs=vp8'};
+} else {
+	options = {
+                        audioBitsPerSecond: 128000,
+                        videoBitsPerSecond: 2500000,
+                        mimeType: 'video/mp4'
+                }
+}*/
+		this.recorder = new MediaRecorder(this.cameraStream,options );
 		this.recorder.ondataavailable = event => {
 			this.videoData.push(event.data);
 		}
 		this.recorder.onstop = function(ev){
-			let recordedBlob = new Blob(this.videoData, { type: this.mediaType });
+			let recordedBlob = new Blob(this.videoData, { type: this.mimeType });
 
  			this.videoPlayers[0].src = URL.createObjectURL(recordedBlob)
                         this.buttonDownload.href = this.videoPlayers[0].src;
-                        this.buttonDownload.download = `magnificent_octopus_${new Date().getTime()}.mp4`;
+                        this.buttonDownload.download = `magnificent_octopus_${new Date().getTime()}.${this.ext}`;
 
                         console.log("Successfully recorded " + recordedBlob.size + " bytes of " + recordedBlob.type + " media.");
 		}.bind(this)
@@ -191,8 +205,8 @@ const promptly = {
 	},
 	initScroll:function(evt){
                 this.scrollContainer.scrollTop=0;
-                this.speed=1.9;
                 this.textContainer.innerHTML=this.rawFileContent;//localStorage.getItem(evt.detail);
+p
 	},
 	scrollLoop:function(){
                 if ( this.paused === false  ) {
@@ -241,40 +255,4 @@ const promptly = {
 
 promptly.go();
 
-/*
-
-;( function SCROLLER (){
-	let PAUSED = false;
-	let SPEED = 0;
-
-	const main = document.getElementById("maintext");
-	
-	function repeatOften() {
-		if ( PAUSED === false  ) {
-	        	document.body.scrollTop+=SPEED;
-		}
-	        requestAnimationFrame(repeatOften);
-	}
-
-	document.addEventListener('pause', function (e) {
-		PAUSED=true;	
-	});
-	
-
-	document.addEventListener('play', function (e) {
-		PAUSED=false;
-	});
-	
-	document.addEventListener('speedchange', function (e) {
-		SPEED=e.detail;
-	});
-	
-	document.addEventListener('userloadedfile', function (e) {
-		document.body.scrollTop=0;
-		SPEED=0;
-		main.innerHTML=localStorage.getItem(e.detail);
-		requestAnimationFrame(repeatOften);
-	}, false);
-
-})();*/
 </script>
