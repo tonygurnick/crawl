@@ -84,6 +84,8 @@ main {
 			<button id="startButton" class="button">record</button>
 			<button id="stopButton" class="button">stop</button>
 			<a id="downloadButton" class="button"> Download</a>
+			<button id="fasterButton" class="button">faster</button>
+			<button id="slowerButton" class="button">slower</button>
 		</div>
 </body>
 </html>
@@ -140,11 +142,15 @@ const promptly = {
 	addDomHandlers:function() {
 		this.buttonStart.addEventListener("click", this.start.bind(this) );
 		this.buttonStop.addEventListener("click", this.stop.bind(this) );
+		this.buttonFaster.addEventListener("click", this.faster.bind(this) );
+		this.buttonSlower.addEventListener("click", this.slower.bind(this) );
 	},
 	captureDom:function(){
 		this.videoPlayers = document.querySelectorAll('video');
 		this.buttonStart = document.getElementById("startButton");
 		this.buttonStop = document.getElementById("stopButton");
+		this.buttonFaster = document.getElementById("fasterButton");
+		this.buttonSlower = document.getElementById("slowerButton");
 		this.container = document.body;
 		this.buttonDownload = document.getElementById("downloadButton");
 		this.scrollContainer = document.body;//document.getElementById(this.scrollableElementId);
@@ -242,6 +248,12 @@ p
 		} catch (err) {
 			console.error(err)
 		}
+	},
+	faster: function(){
+		this.speed = this.speed + 1;
+	},
+	slower: function() {
+		this.speed = Math.max( 0, this.speed - 1)
 	}
 };
 
