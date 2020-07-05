@@ -53,6 +53,13 @@ body{
         padding:1rem;
         margin: 1rem;
 }
+#speedIndicator{
+	border: 1px solid red;
+	font-size: 1.6rem;
+	padding: 1rem;
+	position: fixed;
+	top:1rem;right:1rem;
+}
 .dragging {
 	background-color: red;
 }
@@ -87,6 +94,7 @@ main {
 			<button id="fasterButton" class="button">faster</button>
 			<button id="slowerButton" class="button">slower</button>
 		</div>
+		<div id="speedIndicator"></div>
 </body>
 </html>
 <script>
@@ -102,7 +110,7 @@ const promptly = {
 	minorView:null,
 	scrollableElementId: "scrollContainer",
 	textContainerElementId:"textContainer",
-	speed:3,
+	speed:2,
 	paused:true,
 	filename:"",
 	preventDefault:function(e){
@@ -151,6 +159,7 @@ const promptly = {
 		this.buttonStop = document.getElementById("stopButton");
 		this.buttonFaster = document.getElementById("fasterButton");
 		this.buttonSlower = document.getElementById("slowerButton");
+		this.indicatorSpeed = document.getElementById("speedIndicator");
 		this.container = document.body;
 		this.buttonDownload = document.getElementById("downloadButton");
 		this.scrollContainer = document.body;//document.getElementById(this.scrollableElementId);
@@ -212,9 +221,9 @@ if (MediaRecorder.isTypeSupported('video/webm;codecs=vp9')) {
 	initScroll:function(evt){
                 this.scrollContainer.scrollTop=0;
                 this.textContainer.innerHTML=this.rawFileContent;//localStorage.getItem(evt.detail);
-p
 	},
 	scrollLoop:function(){
+		this.indicatorSpeed.innerHTML=`<span>${ Math.round(( this.speed + Number.EPSILON) * 100) / 100 }</span>`;
                 if ( this.paused === false  ) {
                         this.scrollContainer.scrollTop+=this.speed;
                 }
@@ -250,10 +259,10 @@ p
 		}
 	},
 	faster: function(){
-		this.speed = this.speed + 1;
+		this.speed = this.speed + .2
 	},
 	slower: function() {
-		this.speed = Math.max( 0, this.speed - 1)
+		this.speed = Math.max( 1, this.speed  - .2 );
 	}
 };
 
