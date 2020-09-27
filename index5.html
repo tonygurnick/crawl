@@ -1,0 +1,122 @@
+<!doctype>
+<html>
+<head>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        html {
+            font-size: 62.5%;
+        }
+        body {
+            scroll-behavior: smooth;
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding:0;
+            color: #444;
+        }
+        main {
+            padding-bottom: 100%;
+        }
+        section {
+            height: 100vh;
+            width: 100vw;
+            padding: 10vh 10vw ;
+            background-color: #f1f1f1;
+            border-bottom: 1px dashed black;
+        }
+        div {
+            background-color: #fefefe;
+            height: 80vh;
+            width: 80vw;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        p.pager {
+            font-size: 50px;
+        }
+        footer{
+
+        }
+
+        #control-bar{
+            position: fixed;top:0;left:0;width: 100%;height: 30px;
+        }
+        .playing #control-bar{
+            background-color: #00D067;
+        }
+
+    </style>
+</head>
+<body >
+<progress id="progress-bar" max=100 value=0></progress>
+<main role="main" id="main">
+
+</main>
+<div id="control-bar">
+    <button id="play">Play</button>
+<span id="debug"></span>
+</div>
+<footer class="output"></footer>
+</body>
+</html>
+<script>
+    let SPEED=0;
+
+    function play( speed=2){
+        SPEED=speed;
+    }
+    function stop(){
+        SPEED=0;
+    }
+    function restart() {
+        document.body.scrollTop=0;
+        play();
+    }
+    function repeatOften() {
+        document.body.scrollTop+=SPEED;
+
+        requestAnimationFrame(repeatOften);
+    }
+
+    const section = function(pageNumber){
+        const s = document.createElement("section");
+        const d = document.createElement("div");
+        const p = document.createElement("p");
+
+        p.className = "pager";
+        p.appendChild(document.createTextNode(`page ${pageNumber}`))
+        d.appendChild(p);
+        s.appendChild(d);
+        return s;
+    }
+    let pageCount = 1;
+
+    document.getElementById("main").appendChild( section(pageCount) );
+
+    window.addEventListener("scroll", function(){
+        const pageNumber = Math.ceil(document.body.scrollTop/window.innerHeight);
+
+        document.getElementById("debug").innerHTML=`${document.body.scrollTop/window.innerHeight} ${pageNumber} ${pageCount}`
+        if ( pageNumber > pageCount ){
+            pageCount=pageNumber;
+            document.getElementById("main").appendChild( section(pageNumber) );
+        }
+    });
+
+    document.getElementById("play").addEventListener("click", function(){
+       if ( SPEED === 0){
+           document.body.classList.add("playing");
+           document.body.classList.remove("stopped");
+           play();
+       } else {
+           document.body.classList.add("stopped");
+           document.body.classList.remove("playing");
+           stop();
+       }
+    });
+
+    repeatOften()
+</script>
